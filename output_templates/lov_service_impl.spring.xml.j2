@@ -1,0 +1,31 @@
+
+<property name="sqlListOfValuesQuery">
+  <map merge="true">
+    {% for field in fields if not field.isWithParam %}
+    <entry key="${{{ field.fieldId }}}{{ functionId }}_valuesList_01">
+      <bean class="org.apache.commons.io.IOUtils" factory-method="toString">
+        <constructor-arg type="java.io.InputStream"
+          value="classpath:com/linedata/chorus/std/services/commons/dao/lovvalue/{{ field.fieldId }}{{ functionId }}_valuesList_01.sql" />
+      </bean>
+    </entry>
+    {% endfor %}
+  </map>
+</property>
+
+
+{% for field in fields if field.isWithParam %}
+<bean id="{{ field.fieldId }}{{ functionId }}LovQueryService"
+      class="com.linedata.chorus.std.services.commons.service.lov.service.impl.{{ field.fieldId }}{{ functionId }}LovQueryServiceImpl">
+  <property name="frameworkJdbcTemplate" ref="chorusDaoTemplate" />
+  <property name="sqlListOfValuesQuery">
+    <map merge="true">
+      <entry key="{{ field.fieldId }}{{ functionId }}LovQueryService">
+        <bean class="org.apache.commons.io.IOUtils" factory-method="toString">
+          <constructor-arg type="java.io.InputStream"
+            value="classpath:com/linedata/chorus/std/services/commons/dao/lovvalue/{{ field.fieldId }}{{ functionId }}_valuesList_01.sql" />
+        </bean>
+      </entry>
+    </map>
+  </property>
+</bean>
+{% endfor %}
