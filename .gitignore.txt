@@ -1,0 +1,13 @@
+# Ignorer les exécutables
+*.exe
+
+# Ignorer les fichiers de build PyInstaller
+*.spec
+/build/
+/dist/
+
+# Ignorer les fichiers temporaires Python
+__pycache__/
+*.pyc
+*.pyo
+*.log
