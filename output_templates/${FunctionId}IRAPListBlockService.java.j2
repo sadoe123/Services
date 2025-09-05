@@ -1,14 +1,21 @@
-${FunctionId}IRAPListBlockService.java
 package com.linedata.chorus.std.gui;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+
 import javax.annotation.Resource;
+
 import org.dozer.DozerBeanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.linedata.chorus.std.services.objectconverters.DateFormatter;
 import com.linedata.chorus.std.services.utils.UtilsService;
+import com.linedata.chorus.std.services.reports.GenericReportService;
+
+import com.linedata.ekip.commons.server.log.LogFactory;
+import com.linedata.ekip.commons.server.log.Logger;
 import com.linedata.ekip.commons.shared.context.ActionContext;
 import com.linedata.ekip.commons.shared.lov.LovOpenFunctionMode;
 import com.linedata.ekip.core.server.screenservices.GridService;
@@ -17,13 +24,17 @@ import com.linedata.ekip.core.shared.context.screencontext.ScreenContext;
 import com.linedata.ekip.core.shared.data.Data;
 import com.linedata.ekip.core.shared.lov.LovEvent;
 
+import com.linedata.chorus.std.entity.{{ functionId }}IRAP.{{ functionId }}IRAP;
+import com.linedata.chorus.std.entity.{{ functionId }}IRAP.impl.{{ functionId }}IRAPImpl;
+
 @Component
-public class ${FunctionId}IRAPListBlockService implements GridService
+public class {{ FunctionId }}IRAPListBlockService implements GridService
 {
-    private static final String BEANID = "${FunctionId}IRAPListBlockService";
+    private static final String BEANID = "{{ FunctionId }}IRAPListBlockService";
+    private final Logger logger = LogFactory.getLog({{ FunctionId }}IRAPListBlockService.class);
 
     @Autowired
-    private ${FunctionId}Service ${functionId}Service;
+    private {{ FunctionId }}Service {{ functionId }}Service;
 
     @Resource(name = "ReportMapper")
     protected DozerBeanMapper mapper;
@@ -31,28 +42,43 @@ public class ${FunctionId}IRAPListBlockService implements GridService
     @Autowired
     private UtilsService utilsService;
 
+    @Autowired
+    private GenericReportService genericService;
+
     public String getBeanId()
     {
         return BEANID;
     }
 
     @Override
-    public List<Data> provideData(ActionContext actionContext, LovEvent event,
-                                  LovOpenFunctionMode openFunctionMode, ScreenContext screenContext, Data inParameters,
-                                  FunctionalContext functionalContext)
+    public List<? extends Data> provideData(ActionContext actionContext, LovEvent event,
+                                            LovOpenFunctionMode openFunctionMode,
+                                            ScreenContext screenContext,
+                                            Data inParameters,
+                                            FunctionalContext functionalContext)
     {
         List<Data> result = new ArrayList<>();
         Data formData = inParameters.get("DATASERVICEPARAMETER");
 
         if (formData != null && formData.get("xidlog") != null)
-            utilsService.xlogUpdate(formData.get("xidlog"), "${FunctionId}I");
+        {
+            utilsService.xlogUpdate(formData.get("xidlog"), "{{ FunctionId }}I");
+        }
 
-        // Dummy mapping
-        // List<${FunctionId}> list = ${functionId}Service.getData();
-        // for (${FunctionId} item : list) {
-        //     Data data = mapper.map(item, Data.class);
-        //     result.add(data);
-        // }
+        {{ functionId }}IRAP {{ functionId }}irap = mapper.map(formData, {{ functionId }}IRAPImpl.class);
+        String iidrap = genericService.getReportsId({{ functionId }}irap);
+        {{ functionId }}irap.setIidrap(iidrap);
+
+        List<{{ FunctionId }}IRAP> {{ functionId }}List = genericService.getGridList({{ functionId }}irap);
+
+        for ({{ FunctionId }}IRAP item : {{ functionId }}List)
+        {
+            if (item != null)
+            {
+                Data data = mapper.map(item, Data.class);
+                result.add(data);
+            }
+        }
 
         return result;
     }

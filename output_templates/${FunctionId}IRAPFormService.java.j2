@@ -1,4 +1,3 @@
-${FunctionId}IRAPFormService.java
 package com.linedata.chorus.std.gui;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +12,9 @@ import com.linedata.ekip.core.shared.data.Data;
 import com.linedata.ekip.core.shared.lov.LovEvent;
 
 @Component
-public class ${FunctionId}IRAPFormService implements FormService
+public class {{ FunctionId }}IRAPFormService implements FormService
 {
-    public static final String BEANID = "${FunctionId}IRAPFormService";
+    public static final String BEANID = "{{ FunctionId }}IRAPFormService";
 
     @Autowired
     UtilsService utilsService;
@@ -32,10 +31,10 @@ public class ${FunctionId}IRAPFormService implements FormService
                             FunctionalContext functionalContext)
     {
         if (event.getValue().equals(LovEvent.SCREENOPENED.getValue()) &&
-            inParameters.get("SCREENID").equals("${FunctionId}IRAP"))
+            inParameters.get("SCREENID").equals("{{ FunctionId }}IRAP"))
         {
             Data data = new Data();
-            String xidlog = utilsService.xlogCreate("${FunctionId.toUpperCase()}C");
+            String xidlog = utilsService.xlogCreate("{{ FunctionId.upper() }}C");
             String xidclg = utilsService.getXetbXidclg();
             String xidcev = utilsService.getXetbXidcev();
             data.set("xidlog", xidlog);

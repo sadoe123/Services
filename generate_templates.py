@@ -13,7 +13,7 @@ def generate_code(fct_name):
     FunctionId = capitalize_first(fct_name)
     functionId = fct_name.lower()
 
-    # Templates disponibles dans output_templates
+    
     templates = [
         "${FunctionId}FunctionService.java.j2",
         "${FunctionId}IRAPFormService.java.j2", 
@@ -24,17 +24,17 @@ def generate_code(fct_name):
 
     for template_name in templates:
         try:
-            # Charger le template
+            
             template = env.get_template(template_name)
             
-            # Rendre le template avec les variables
+            
             content = template.render(FunctionId=FunctionId, functionId=functionId)
             
-            # Déterminer le nom du fichier de sortie
+            
             output_filename = template_name.replace(".j2", "").replace("${FunctionId}", FunctionId)
             output_file = os.path.join(OUTPUT_DIR, output_filename)
             
-            # Écrire le contenu dans le fichier
+            
             with open(output_file, "w", encoding="utf-8") as f:
                 f.write(content)
             
@@ -46,3 +46,7 @@ def generate_code(fct_name):
 if __name__ == "__main__":
     fct_name = input("🔧 Entrez le nom de la fonction (ex: reiv) : ").strip()
     generate_code(fct_name)
+
+
+
+input("Appuyez sur Entrée pour fermer la console...")

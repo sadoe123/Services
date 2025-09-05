@@ -1,0 +1,64 @@
+686 INFO: PyInstaller: 6.15.0, contrib hooks: 2025.8
+686 INFO: Python: 3.11.0
+714 INFO: Platform: Windows-10-10.0.26100-SP0
+714 INFO: Python environment: C:\Users\user\AppData\Local\Programs\Python\Python311
+716 INFO: wrote C:\Users\user\Desktop\Services\lovservice.spec
+784 INFO: Module search paths (PYTHONPATH):
+['C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Scripts\\pyinstaller.exe',
+ 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\python311.zip',
+ 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib',
+ 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\DLLs',
+ 'C:\\Users\\user\\AppData\\Roaming\\Python\\Python311\\site-packages',
+ 'C:\\Users\\user\\AppData\\Roaming\\Python\\Python311\\site-packages\\win32',
+ 'C:\\Users\\user\\AppData\\Roaming\\Python\\Python311\\site-packages\\win32\\lib',
+ 'C:\\Users\\user\\AppData\\Roaming\\Python\\Python311\\site-packages\\Pythonwin',
+ 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311',
+ 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages',
+ 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\setuptools\\_vendor',
+ 'C:\\Users\\user\\Desktop\\Services']
+1195 WARNING: discover_hook_directories: Failed to process hook entry point 'EntryPoint(name='hook-dirs', value='rapidfuzz.__pyinstaller:get_hook_dirs', group='pyinstaller40')': AttributeError: module 'rapidfuzz.__pyinstaller' has no attribute 'get_hook_dirs'
+2471 INFO: checking Analysis
+2472 INFO: Building Analysis because Analysis-00.toc is non existent
+2472 INFO: Running Analysis Analysis-00.toc
+2472 INFO: Target bytecode optimization level: 0
+2472 INFO: Initializing module dependency graph...
+2474 INFO: Initializing module graph hook caches...
+2538 INFO: Analyzing modules for base_library.zip ...
+7067 INFO: Processing standard module hook 'hook-heapq.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks'
+7449 INFO: Processing standard module hook 'hook-encodings.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks'
+14791 INFO: Processing standard module hook 'hook-pickle.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks'
+22655 INFO: Caching module dependency graph...
+22910 INFO: Looking for Python shared library...
+22953 INFO: Using Python shared library: C:\Users\user\AppData\Local\Programs\Python\Python311\python311.dll
+22953 INFO: Analyzing C:\Users\user\Desktop\Services\lovservice.py
+22962 INFO: Processing module hooks (post-graph stage)...
+22988 INFO: Performing binary vs. data reclassification (1 entries)
+22991 INFO: Looking for ctypes DLLs
+23027 INFO: Analyzing run-time hooks ...
+23029 INFO: Including run-time hook 'pyi_rth_inspect.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks'
+23045 INFO: Creating base_library.zip...
+23477 INFO: Looking for dynamic libraries
+24077 INFO: Extra DLL search directories (AddDllDirectory): []
+24078 INFO: Extra DLL search directories (PATH): []
+25438 INFO: Warnings written to C:\Users\user\Desktop\Services\build\lovservice\warn-lovservice.txt
+25544 INFO: Graph cross-reference written to C:\Users\user\Desktop\Services\build\lovservice\xref-lovservice.html
+25655 INFO: checking PYZ
+25655 INFO: Building PYZ because PYZ-00.toc is non existent
+25655 INFO: Building PYZ (ZlibArchive) C:\Users\user\Desktop\Services\build\lovservice\PYZ-00.pyz
+27250 INFO: Building PYZ (ZlibArchive) C:\Users\user\Desktop\Services\build\lovservice\PYZ-00.pyz completed successfully.
+27304 INFO: checking PKG
+27304 INFO: Building PKG because PKG-00.toc is non existent
+27305 INFO: Building PKG (CArchive) lovservice.pkg
+38362 INFO: Building PKG (CArchive) lovservice.pkg completed successfully.
+38385 INFO: Bootloader C:\Users\user\AppData\Local\Programs\Python\Python311\Lib\site-packages\PyInstaller\bootloader\Windows-64bit-intel\run.exe
+38387 INFO: checking EXE
+38388 INFO: Building EXE because EXE-00.toc is non existent
+38388 INFO: Building EXE from EXE-00.toc
+38389 INFO: Copying bootloader EXE to C:\Users\user\Desktop\Services\dist\lovservice.exe
+38661 INFO: Copying icon to EXE
+38953 INFO: Copying 0 resources to EXE
+38954 INFO: Embedding manifest in EXE
+39132 INFO: Appending PKG archive to EXE
+39855 INFO: Fixing EXE headers
+43221 INFO: Building EXE from EXE-00.toc completed successfully.
+43235 INFO: Build complete! The results are available in: C:\Users\user\Desktop\Services\dist

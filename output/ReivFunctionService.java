@@ -1,5 +1,4 @@
-${FunctionId}FunctionService.java
-package com.linedata.chorus.std.gui.${functionId};
+package com.linedata.chorus.std.gui.reiv;
 import java.util.Collection;
 import java.util.Map;
 import java.util.List;
@@ -8,8 +7,8 @@ import javax.annotation.Resource;
 import org.dozer.DozerBeanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import com.linedata.chorus.std.entity.${functionId}IRAP.${functionId}IRAP;
-import com.linedata.chorus.std.entity.${functionId}IRAP.impl.${functionId}IRAPImpl;
+import com.linedata.chorus.std.entity.ReivIRAP.ReivIRAP;
+import com.linedata.chorus.std.entity.ReivIRAP.impl.ReivIRAPImpl;
 import com.linedata.chorus.std.gui.commons.server.ExceptionManager;
 import com.linedata.chorus.std.services.Report.impl.BIPRWSService;
 import com.linedata.chorus.std.services.Report.impl.BOExportService;
@@ -30,9 +29,9 @@ import com.linedata.ekip.core.shared.data.Data;
 import com.linedata.ekip.core.shared.data.ScreenServiceResponse;
 import com.linedata.ekip.core.shared.lov.LovScreenServiceReturnCode;
 @Component
-public class ${FunctionId}IRAPFunctionService extends ScreenService
+public class ReivIRAPFunctionService extends ScreenService
 {
- private static final String BEANID = "${FunctionId}IRAPFunctionService";
+ private static final String BEANID = "ReivIRAPFunctionService";
  @Autowired
  protected ChorusStoredProcedure chorusStoredProcedure;
  @Autowired
@@ -73,19 +72,19 @@ ScreenContext screenContext, Data inParameters) throws Exception
  String documentId = "";
  String documentCUID = "";
  String extension = "";
- String exportPath = "C:\dev\tools\apache-tomcat-Chorus\webapps\REPORT\";
+ String exportPath = "C:\\dev\\tools\\apache-tomcat-Chorus\\webapps\\REPORT\\";
  ScreenServiceResponse screenServiceResponse = initScreenServiceResponse(screenContext);
  screenContext.getOthersParameters();
- Data ${FunctionId}ReportGeneric = inParameters.get(${functionId}+"BlockForm");
- List<Data> reportList = inParameters.get(${functionId}+"BlockList");
+ Data ReivReportGeneric = inParameters.get("reivBlockForm");
+ List<Data> reportList = inParameters.get(reiv+"BlockList");
  List<Data> selectedReportList=filterSelectedData(reportList);
- ${FunctionId}IRAP ${functionId}irap = mapper.map(${FunctionId}ReportGeneric, ${FunctionId}IRAPImpl.class);
+ ReivIRAP reivirap = mapper.map(ReivReportGeneric, ReivIRAPImpl.class);
  try
  {
- String className = ${FunctionId}.getClass().toString();
- Collection<String> ${functionId}ReportGenericNames = ${functionId}ReportGeneric.getPropertyNames();
- Collection<Integer> fieldsReportNumber = genericService.generateLunchNumber(${FunctionId}ReportGenericNames, className);
- Map<String, Object> map = genericService.generateReport(${FunctionId}irap, fieldsReportNumber);
+ String className = Reiv.getClass().toString();
+ Collection<String> reivReportGenericNames = reivReportGeneric.getPropertyNames();
+ Collection<Integer> fieldsReportNumber = genericService.generateLunchNumber(reivReportGenericNames, className);
+ Map<String, Object> map = genericService.generateReport(reivirap, fieldsReportNumber);
  iidlan = (Integer) map.get("iidlan0");
  ScriptExecutorService executor = new ScriptExecutorService();
  String response = executor.executeScript(iidlan);
@@ -126,7 +125,7 @@ BOExportService.exportCSV(token, documentId, exportPath);
  break;
  case ".txt":
  BOExportService.exportText(token, documentId, exportPath);
- fileNameBuilder.append("/IRAP");
+ fileNameBuilder.append("/IRAP"); 
  break;
  default:
  System.out.println("Extension inconnue.");

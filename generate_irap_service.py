@@ -1,17 +1,14 @@
 import os
-from jinja2 import Environment, FileSystemLoader
 
-TEMPLATE_DIR = "templates"
+
 OUTPUT_DIR = "output"
 OUTPUT_TEMPLATE_DIR = "output_templates"
-FUNCTION_NAME = "MyFunction"  # <-- Change ici si besoin
 
-# Créer les dossiers si besoin
-os.makedirs(TEMPLATE_DIR, exist_ok=True)
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 os.makedirs(OUTPUT_TEMPLATE_DIR, exist_ok=True)
 
-# --- Template FormService (GENERIC) ---
+
+# --- Form Service ---
 formservice_template_content = """${FunctionId}IRAPFormService.java
 package com.linedata.chorus.std.gui;
 
@@ -62,18 +59,26 @@ public class ${FunctionId}IRAPFormService implements FormService
 }
 """
 
-# --- Template GridService (GENERIC) ---
+# --- Grid Service ---
 gridservice_template_content = """${FunctionId}IRAPListBlockService.java
 package com.linedata.chorus.std.gui;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+
 import javax.annotation.Resource;
+
 import org.dozer.DozerBeanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.linedata.chorus.std.services.objectconverters.DateFormatter;
 import com.linedata.chorus.std.services.utils.UtilsService;
+import com.linedata.chorus.std.services.reports.GenericReportService;
+
+import com.linedata.ekip.commons.server.log.LogFactory;
+import com.linedata.ekip.commons.server.log.Logger;
 import com.linedata.ekip.commons.shared.context.ActionContext;
 import com.linedata.ekip.commons.shared.lov.LovOpenFunctionMode;
 import com.linedata.ekip.core.server.screenservices.GridService;
@@ -82,10 +87,14 @@ import com.linedata.ekip.core.shared.context.screencontext.ScreenContext;
 import com.linedata.ekip.core.shared.data.Data;
 import com.linedata.ekip.core.shared.lov.LovEvent;
 
+import com.linedata.chorus.std.entity.${functionId}IRAP.${functionId}IRAP;
+import com.linedata.chorus.std.entity.${functionId}IRAP.impl.${functionId}IRAPImpl;
+
 @Component
 public class ${FunctionId}IRAPListBlockService implements GridService
 {
     private static final String BEANID = "${FunctionId}IRAPListBlockService";
+    private final Logger logger = LogFactory.getLog(${FunctionId}IRAPListBlockService.class);
 
     @Autowired
     private ${FunctionId}Service ${functionId}Service;
@@ -96,35 +105,51 @@ public class ${FunctionId}IRAPListBlockService implements GridService
     @Autowired
     private UtilsService utilsService;
 
+    @Autowired
+    private GenericReportService genericService;
+
     public String getBeanId()
     {
         return BEANID;
     }
 
     @Override
-    public List<Data> provideData(ActionContext actionContext, LovEvent event,
-                                  LovOpenFunctionMode openFunctionMode, ScreenContext screenContext, Data inParameters,
-                                  FunctionalContext functionalContext)
+    public List<? extends Data> provideData(ActionContext actionContext, LovEvent event,
+                                            LovOpenFunctionMode openFunctionMode,
+                                            ScreenContext screenContext,
+                                            Data inParameters,
+                                            FunctionalContext functionalContext)
     {
         List<Data> result = new ArrayList<>();
         Data formData = inParameters.get("DATASERVICEPARAMETER");
 
         if (formData != null && formData.get("xidlog") != null)
+        {
             utilsService.xlogUpdate(formData.get("xidlog"), "${FunctionId}I");
+        }
 
-        // Dummy mapping
-        // List<${FunctionId}> list = ${functionId}Service.getData();
-        // for (${FunctionId} item : list) {
-        //     Data data = mapper.map(item, Data.class);
-        //     result.add(data);
-        // }
+        ${functionId}IRAP ${functionId}irap = mapper.map(formData, ${functionId}IRAPImpl.class);
+        String iidrap = genericService.getReportsId(${functionId}irap);
+        ${functionId}irap.setIidrap(iidrap);
+
+        List<${FunctionId}IRAP> ${functionId}List = genericService.getGridList(${functionId}irap);
+
+        for (${FunctionId}IRAP item : ${functionId}List)
+        {
+            if (item != null)
+            {
+                Data data = mapper.map(item, Data.class);
+                result.add(data);
+            }
+        }
 
         return result;
     }
 }
+
 """
 
-# --- Template FunctionService (GENERIC) ---
+# --- Function Service ---
 functionservice_template_content = """${FunctionId}FunctionService.java
 package com.linedata.chorus.std.gui.${functionId};
 import java.util.Collection;
@@ -135,8 +160,8 @@ import javax.annotation.Resource;
 import org.dozer.DozerBeanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import com.linedata.chorus.std.entity.${functionId}IRAP.${functionId}IRAP;
-import com.linedata.chorus.std.entity.${functionId}IRAP.impl.${functionId}IRAPImpl;
+import com.linedata.chorus.std.entity.${FunctionId}IRAP.${FunctionId}IRAP;
+import com.linedata.chorus.std.entity.${FunctionId}IRAP.impl.${FunctionId}IRAPImpl;
 import com.linedata.chorus.std.gui.commons.server.ExceptionManager;
 import com.linedata.chorus.std.services.Report.impl.BIPRWSService;
 import com.linedata.chorus.std.services.Report.impl.BOExportService;
@@ -200,10 +225,10 @@ ScreenContext screenContext, Data inParameters) throws Exception
  String documentId = "";
  String documentCUID = "";
  String extension = "";
- String exportPath = "C:\\dev\\tools\\apache-tomcat-Chorus\\webapps\\REPORT\\";
+ String exportPath = "C:\\\\dev\\\\tools\\\\apache-tomcat-Chorus\\\\webapps\\\\REPORT\\\\";
  ScreenServiceResponse screenServiceResponse = initScreenServiceResponse(screenContext);
  screenContext.getOthersParameters();
- Data ${FunctionId}ReportGeneric = inParameters.get(${functionId}+"BlockForm");
+ Data ${FunctionId}ReportGeneric = inParameters.get("${functionId}BlockForm");
  List<Data> reportList = inParameters.get(${functionId}+"BlockList");
  List<Data> selectedReportList=filterSelectedData(reportList);
  ${FunctionId}IRAP ${functionId}irap = mapper.map(${FunctionId}ReportGeneric, ${FunctionId}IRAPImpl.class);
@@ -212,7 +237,7 @@ ScreenContext screenContext, Data inParameters) throws Exception
  String className = ${FunctionId}.getClass().toString();
  Collection<String> ${functionId}ReportGenericNames = ${functionId}ReportGeneric.getPropertyNames();
  Collection<Integer> fieldsReportNumber = genericService.generateLunchNumber(${FunctionId}ReportGenericNames, className);
- Map<String, Object> map = genericService.generateReport(${FunctionId}irap, fieldsReportNumber);
+ Map<String, Object> map = genericService.generateReport(${functionId}irap, fieldsReportNumber);
  iidlan = (Integer) map.get("iidlan0");
  ScriptExecutorService executor = new ScriptExecutorService();
  String response = executor.executeScript(iidlan);
@@ -283,11 +308,10 @@ BOExportService.exportCSV(token, documentId, exportPath);
 }
 """
 
-# --- Génération des trois templates dans output_templates avec les bons noms ---
 templates = [
     ("${FunctionId}IRAPFormService.java.j2", formservice_template_content),
     ("${FunctionId}IRAPListBlockService.java.j2", gridservice_template_content),
-    ("${FunctionId}FunctionService.java.j2", functionservice_template_content)
+    ("${FunctionId}FunctionService.java.j2", functionservice_template_content),
 ]
 
 for filename, content in templates:
@@ -295,4 +319,7 @@ for filename, content in templates:
     with open(output_path, "w", encoding="utf-8") as f:
         f.write(content)
     print(f"📝 Template généré : {output_path}")
-    
+
+
+
+input("Appuyez sur Entrée pour fermer la console...")
